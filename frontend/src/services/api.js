@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -90,8 +90,10 @@ export const updateTaskStatus = async (meetingId, taskIndex, data) => {
 export const transcribeAudioFile = async (file) => {
   const formData = new FormData();
   formData.append('audio', file);
-  const res = await axios.post(`${BASE_URL}/meeting/transcribe-audio`, formData, {
-    headers: { Authorization: api.defaults.headers.Authorization }
+  const stored = localStorage.getItem('meetai_user');
+  const token = stored ? JSON.parse(stored)?.token : null;
+  const res = await axios.post('/api/meeting/transcribe-audio', formData, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
   });
   return res.data;
 };
