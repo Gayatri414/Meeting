@@ -128,11 +128,17 @@ export const transcribeAudio = async (buffer, mimeType = 'audio/wav') => {
     const transcription = await groq.audio.transcriptions.create({
       file: fs.createReadStream(tmpPath),
       model: AUDIO_MODEL,
-      response_format: 'text',
-      language: 'en',
+      response_format: 'verbose_json',
     });
 
-    return { transcript: typeof transcription === 'string' ? transcription.trim() : transcription?.text?.trim() || '' };
+    console.log('[AI] Transcription result:', JSON.stringify(transcription, null, 2));
+    
+    const text = typeof transcription === 'string' ? transcription.trim() : transcription?.text?.trim() || '';
+    if (!text) {
+      console.warn('[AI] Transcription returned empty text');
+    }
+
+    return { transcript: text };
   } catch (err) {
     console.error('❌ Groq transcription error:', err.message, err.status || '');
     return { transcript: `[Transcription failed] ${err.message}` };
