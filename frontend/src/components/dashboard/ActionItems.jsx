@@ -131,18 +131,25 @@ const TaskCard = ({ task, dark }) => {
 };
 
 /* ── Main ActionItems component ──────────────────────────── */
-const ActionItems = ({ tasks, analyzing, currentUserEmail }) => {
+const ActionItems = ({ tasks, analyzing, currentUserEmail, loggedInUser }) => {
   const { dark } = useTheme();
   const [filterMine, setFilterMine] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState('all');
   const listRef = useRef(null);
   const containerRef = useRef(null);
 
-  const myName = currentUserEmail?.split('@')[0]?.toLowerCase();
+  const myEmail = currentUserEmail?.toLowerCase();
+  const myName = loggedInUser?.name?.toLowerCase();
 
   let filtered = tasks || [];
-  if (filterMine && myName) {
-    filtered = filtered.filter(t => (t.person || t.user || '').toLowerCase().includes(myName));
+  if (filterMine) {
+    filtered = filtered.filter(t => {
+      const taskPerson = (t.person || t.user || '').toLowerCase();
+      // Match if the person matches my name or email prefix
+      const matchesName = myName && taskPerson.includes(myName);
+      const matchesEmail = myEmail && taskPerson.includes(myEmail.split('@')[0]);
+      return matchesName || matchesEmail;
+    });
   }
   if (priorityFilter !== 'all') {
     filtered = filtered.filter(t => t.priority?.toLowerCase() === priorityFilter);

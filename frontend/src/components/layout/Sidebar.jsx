@@ -26,7 +26,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     localStorage.removeItem('meetai_user');
     localStorage.removeItem('meetai_theme');
-    window.location.href = '/login';
+    navigate('/login', { replace: true });
   };
 
   const textMuted = dark ? 'text-gray-400' : 'text-gray-500';

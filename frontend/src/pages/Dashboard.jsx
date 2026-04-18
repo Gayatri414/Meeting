@@ -492,7 +492,7 @@ const Dashboard = () => {
             </motion.div>
           )}
 
-          <ActionItems tasks={meetingResult?.tasks} analyzing={analyzing} currentUserEmail={loggedInEmail} />
+          <ActionItems tasks={meetingResult?.tasks} analyzing={analyzing} currentUserEmail={loggedInEmail} loggedInUser={loggedInUser} />
 
           {/* Task sync panel — shown after analysis */}
           {meetingResult && (
