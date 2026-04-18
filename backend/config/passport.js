@@ -13,28 +13,36 @@ export const configurePassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
+          console.log('[PASSPORT] Google Profile:', JSON.stringify(profile, null, 2));
+
           const email = profile.emails?.[0]?.value?.toLowerCase();
-          if (!email) return done(new Error('No email from Google'), null);
+          if (!email) {
+            console.error('[PASSPORT] Error: No email found in Google profile');
+            return done(new Error('No email from Google'), null);
+          }
+
+          const name = profile.displayName || profile.name?.givenName || email.split('@')[0];
+          const picture = profile.photos?.[0]?.value || '';
 
           // Find existing user by googleId or email
           let user = await User.findOne({ $or: [{ googleId: profile.id }, { email }] });
 
           if (user) {
-            // Update Google info if signing in with Google for first time on existing account
-            if (!user.googleId) {
-              user.googleId = profile.id;
-              user.authProvider = 'google';
-              user.picture = profile.photos?.[0]?.value || user.picture;
-              if (!user.name) user.name = profile.displayName;
-              await user.save();
-            }
+            console.log(`[PASSPORT] Found existing user: ${user.email}`);
+            // Always update Google info to keep it fresh
+            user.googleId = profile.id;
+            user.authProvider = 'google';
+            if (picture) user.picture = picture;
+            if (name) user.name = name;
+            await user.save();
           } else {
+            console.log(`[PASSPORT] Creating new user: ${email}`);
             // Create new user
             user = await User.create({
               email,
               googleId:     profile.id,
-              name:         profile.displayName || email.split('@')[0],
-              picture:      profile.photos?.[0]?.value || '',
+              name,
+              picture,
               authProvider: 'google',
               password:     null
             });
@@ -42,6 +50,7 @@ export const configurePassport = () => {
 
           return done(null, user);
         } catch (err) {
+          console.error('[PASSPORT] Strategy Error:', err);
           return done(err, null);
         }
       }

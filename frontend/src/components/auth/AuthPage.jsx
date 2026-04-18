@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -35,6 +35,11 @@ const AuthPage = ({ mode }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(searchParams.get('error') ? 'Google sign-in failed. Please try again.' : "");
   const [loading, setLoading] = useState(false);
+
+  // Clear any stale session data when landing on login/signup
+  useEffect(() => {
+    localStorage.removeItem("meetai_user");
+  }, []);
 
   const destination = useMemo(
     () => location.state?.from?.pathname || "/",

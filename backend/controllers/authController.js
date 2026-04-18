@@ -84,6 +84,9 @@ export const updateProfile = asyncHandler(async (req, res) => {
 export const googleCallback = (req, res) => {
   try {
     const user = req.user;
+    console.log('[AUTH] Google login successful for:', user.email);
+    console.log('[AUTH] User data to send:', { id: user._id, email: user.email, name: user.name });
+
     const token = generateToken(user);
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 
@@ -98,6 +101,7 @@ export const googleCallback = (req, res) => {
 
     res.redirect(`${frontendUrl}/auth/callback?user=${userData}`);
   } catch (err) {
+    console.error('[AUTH] Google callback error:', err);
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     res.redirect(`${frontendUrl}/login?error=google_auth_failed`);
   }

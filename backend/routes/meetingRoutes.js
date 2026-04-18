@@ -21,7 +21,7 @@ const upload = multer({
 
 const router = express.Router();
 
-router.post('/transcribe-audio', upload.single('audio'), transcribeAudio);
+router.post('/transcribe-audio', protect, upload.single('audio'), transcribeAudio);
 router.post('/analyze', protect, analyzeMeeting);
 router.get('/all', protect, getAllMeetings);
 router.get('/:id/export', protect, exportPDF);

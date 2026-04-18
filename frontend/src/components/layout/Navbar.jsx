@@ -45,8 +45,10 @@ const Navbar = ({ loggedInUser }) => {
   }, []);
 
   const handleLogout = () => {
+    console.log('[AUTH] Logging out user:', loggedInUser?.email);
     localStorage.removeItem('meetai_user');
-    navigate('/login');
+    localStorage.removeItem('meetai_theme');
+    window.location.href = '/login';
   };
 
   // Theme-aware text classes

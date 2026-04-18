@@ -25,7 +25,8 @@ const MobileSidebar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('meetai_user');
-    navigate('/login');
+    localStorage.removeItem('meetai_theme');
+    window.location.href = '/login';
   };
 
   const navItemClass = (isActive) =>

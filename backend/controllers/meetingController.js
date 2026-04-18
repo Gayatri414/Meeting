@@ -83,7 +83,12 @@ export const getAllMeetings = asyncHandler(async (req, res) => {
   const skip = (parseInt(page) - 1) * parseInt(limit);
 
   const query = {};
-  if (req.user?.id) query.userId = req.user.id;
+  if (req.user?.id) {
+    query.userId = req.user.id;
+  } else {
+    // Force empty if no user (should be caught by middleware, but safety first)
+    return res.status(401).json({ error: 'Unauthorized: User ID missing' });
+  }
   if (pinned === 'true') query.pinned = true;
   if (search) {
     query.$or = [
@@ -137,12 +142,19 @@ export const updateTaskStatus = asyncHandler(async (req, res) => {
 });
 
 export const transcribeAudio = asyncHandler(async (req, res) => {
+  console.log('[MEETING] Received audio upload request from user:', req.user?.id);
+  
   if (!req.file?.buffer) {
+    console.error('[MEETING] Audio upload failed: No file buffer received');
     return res.status(400).json({ error: 'Audio file is required (field name: audio)' });
   }
 
+  console.log(`[MEETING] Processing audio file: ${req.file.originalname} (${req.file.size} bytes)`);
+
   const mimeType = req.file.mimetype || 'audio/wav';
   const { transcript } = await transcribeAudioAI(req.file.buffer, mimeType);
+  
+  console.log('[MEETING] Audio transcription successful');
   return res.status(200).json({ transcript });
 });
 

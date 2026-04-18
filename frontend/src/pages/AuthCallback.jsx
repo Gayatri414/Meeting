@@ -21,8 +21,10 @@ const AuthCallback = () => {
 
     try {
       const user = JSON.parse(decodeURIComponent(userParam));
+      // Overwrite any old data
       localStorage.setItem('meetai_user', JSON.stringify(user));
-      navigate('/', { replace: true });
+      // Force a full page reload to the dashboard to ensure all contexts/states are fresh
+      window.location.href = '/';
     } catch {
       navigate('/login?error=parse_failed', { replace: true });
     }

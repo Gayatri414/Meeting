@@ -25,7 +25,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401 && !window.location.pathname.includes('/login')) {
       localStorage.removeItem('meetai_user');
       window.location.href = '/login';
     }
@@ -90,10 +90,10 @@ export const updateTaskStatus = async (meetingId, taskIndex, data) => {
 export const transcribeAudioFile = async (file) => {
   const formData = new FormData();
   formData.append('audio', file);
-  const stored = localStorage.getItem('meetai_user');
-  const token = stored ? JSON.parse(stored)?.token : null;
-  const res = await axios.post('/api/meeting/transcribe-audio', formData, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  
+  // Use the 'api' instance which already has the correct BASE_URL and auth interceptor
+  const res = await api.post('/meeting/transcribe-audio', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
   });
   return res.data;
 };
