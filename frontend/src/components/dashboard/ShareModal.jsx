@@ -9,7 +9,7 @@ import {
   Copy 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 
 const ShareModal = ({ isOpen, onClose, data }) => {
   const [copied, setCopied] = useState(false);

@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Upload, FileAudio, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 
 const FileUpload = ({ onUpload, transcribing }) => {
   const [dragActive, setDragActive] = useState(false);

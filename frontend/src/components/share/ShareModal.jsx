@@ -1,6 +1,6 @@
 ﻿import { jsPDF } from 'jspdf';
 import { Camera, MessageCircle, Copy, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 
 const ShareModal = ({ isOpen, onClose, content, onToast }) => {
   if (!isOpen) return null;

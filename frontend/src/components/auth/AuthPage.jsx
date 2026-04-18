@@ -1,14 +1,14 @@
 import { useMemo, useState } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
+} from "@/components/ui/Card";
 import { loginUser, signupUser } from "@/services/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { BrainCircuit, ArrowRight } from "lucide-react";
