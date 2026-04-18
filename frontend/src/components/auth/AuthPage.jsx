@@ -55,7 +55,11 @@ const AuthPage = ({ mode }) => {
       localStorage.setItem("meetai_user", JSON.stringify({ ...payload.user, token: payload.token }));
       navigate(destination, { replace: true });
     } catch (apiError) {
-      setError(apiError?.response?.data?.error || "Authentication failed. Please try again.");
+      const msg = apiError?.response?.data?.error
+        || (apiError?.code === 'ERR_NETWORK' ? 'Cannot connect to server. Make sure the backend is running on port 5001.' : null)
+        || apiError?.message
+        || "Authentication failed. Please try again.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
