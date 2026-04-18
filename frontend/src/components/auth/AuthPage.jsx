@@ -13,7 +13,10 @@ import { loginUser, signupUser } from "@/services/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { BrainCircuit, ArrowRight } from "lucide-react";
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+let API_URL = import.meta.env.VITE_API_URL || '/api';
+if (API_URL.startsWith('http') && !API_URL.endsWith('/api')) {
+  API_URL = API_URL.replace(/\/$/, '') + '/api';
+}
 
 // Google "G" icon
 const GoogleIcon = () => (

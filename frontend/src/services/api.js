@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_URL || '/api';
+let BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
+// Auto-fix: ensure absolute URLs have the /api suffix if the backend uses it
+if (BASE_URL.startsWith('http') && !BASE_URL.endsWith('/api')) {
+  BASE_URL = BASE_URL.replace(/\/$/, '') + '/api';
+}
 
 const api = axios.create({
   baseURL: BASE_URL,
