@@ -1,9 +1,6 @@
 ﻿import express from 'express';
-import { chat } from '../controllers/chatController.js';
+import { chatHandler } from '../controllers/chatController.js';
 
 const router = express.Router();
-
-router.post('/', chat);
-
+router.post('/', chatHandler);
 export default router;
-
