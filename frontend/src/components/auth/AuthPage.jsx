@@ -115,44 +115,26 @@ const AuthPage = ({ mode }) => {
           </CardHeader>
 
           <CardContent className="px-8 pb-8">
-            {/* Google Sign-In */}
-            <Button
-              type="button"
-              onClick={handleGoogleLogin}
-              variant="outline"
-              className="border-white/10 hover:bg-white/5 rounded-xl h-11 w-full mb-4 gap-2"
-            >
-              <GoogleIcon />
-              Continue with Google
-            </Button>
-
-            {/* Divider */}
-            <div className="relative mb-4">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/5" />
+            <form className="space-y-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-white/5" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-[#0f0f11] px-2 text-muted-foreground">Secure Authentication</span>
+                </div>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-[#0f0f11] px-2 text-muted-foreground">Or with email</span>
-              </div>
-            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                type="email"
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-purple h-11 rounded-xl"
-                required
-              />
-              <Input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input-purple h-11 rounded-xl"
-                required
-              />
+              {/* Google Sign-In */}
+              <Button
+                type="button"
+                onClick={handleGoogleLogin}
+                variant="outline"
+                className="border-white/10 hover:bg-white/5 rounded-xl h-14 w-full gap-3 text-lg font-medium transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <GoogleIcon />
+                Continue with Google
+              </Button>
 
               <AnimatePresence>
                 {error && (
@@ -160,36 +142,20 @@ const AuthPage = ({ mode }) => {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="text-sm text-rose-400 bg-rose-500/10 p-3 rounded-xl border border-rose-500/20 flex items-center gap-2"
+                    className="text-sm text-rose-400 bg-rose-500/10 p-4 rounded-xl border border-rose-500/20 flex items-start gap-3"
                   >
-                    <div className="w-1 h-1 rounded-full bg-rose-500 flex-shrink-0" />
-                    {error}
+                    <div className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 flex-shrink-0" />
+                    <p>{error}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full h-11 btn-primary font-semibold rounded-xl group"
-              >
-                {loading ? "Processing..." : (
-                  <span className="flex items-center gap-2">
-                    {isLogin ? "Sign In" : "Get Started"}
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                )}
-              </Button>
-
-              <p className="text-center text-sm text-muted-foreground mt-4">
-                {isLogin ? "New to MeetAI? " : "Already have an account? "}
-                <Link
-                  to={isLogin ? "/signup" : "/login"}
-                  className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors"
-                >
-                  {isLogin ? "Create account" : "Log in"}
-                </Link>
-              </p>
+              <div className="pt-4 border-t border-white/5">
+                <p className="text-center text-sm text-muted-foreground">
+                  By signing in, you agree to our{" "}
+                  <a href="#" className="text-indigo-400 hover:underline">Terms of Service</a>
+                </p>
+              </div>
             </form>
           </CardContent>
         </Card>
