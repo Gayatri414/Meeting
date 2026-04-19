@@ -14,52 +14,8 @@ const api = axios.create({
 
 console.log('[DEBUG] API Base URL:', BASE_URL);
 
-// Attach JWT token to every request
-api.interceptors.request.use((config) => {
-  const stored = localStorage.getItem('meetai_user');
-  if (stored) {
-    try {
-      const user = JSON.parse(stored);
-      if (user?.token) {
-        config.headers.Authorization = `Bearer ${user.token}`;
-      }
-    } catch {}
-  }
-  return config;
-});
 
-// Handle 401 globally
-api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err.response?.status === 401 && !window.location.pathname.includes('/login')) {
-      localStorage.removeItem('meetai_user');
-      window.location.href = '/login';
-    }
-    return Promise.reject(err);
-  }
-);
 
-// ─── Auth ────────────────────────────────────────────────────────────────────
-export const signupUser = async (email, password) => {
-  const res = await api.post('/auth/signup', { email, password });
-  return res.data;
-};
-
-export const loginUser = async (email, password) => {
-  const res = await api.post('/auth/login', { email, password });
-  return res.data;
-};
-
-export const getProfile = async () => {
-  const res = await api.get('/auth/profile');
-  return res.data;
-};
-
-export const updateProfile = async (data) => {
-  const res = await api.put('/auth/profile', data);
-  return res.data;
-};
 
 // ─── Meetings ────────────────────────────────────────────────────────────────
 export const analyzeMeeting = async (transcript, extra = {}) => {

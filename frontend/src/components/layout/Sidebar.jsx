@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard, History, BarChart3, LogOut, BrainCircuit,
+  LayoutDashboard, History, BarChart3, BrainCircuit,
   Calendar, CheckSquare, ChevronLeft, ChevronRight, Share2, MessageSquare
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,11 +23,6 @@ const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem('meetai_user');
-    localStorage.removeItem('meetai_theme');
-    navigate('/login', { replace: true });
-  };
 
   const textMuted = dark ? 'text-gray-400' : 'text-gray-500';
   const subText   = dark ? 'text-[#8b7db5]' : 'text-gray-400';
@@ -138,20 +133,6 @@ const Sidebar = () => {
             </AnimatePresence>
           </button>
 
-          <button
-            onClick={handleLogout}
-            title={collapsed ? 'Logout' : undefined}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl w-full text-[#8b7db5] hover:bg-red-500/10 hover:text-red-400 transition-all ${collapsed ? 'justify-center' : ''}`}
-          >
-            <LogOut className="h-5 w-5 flex-shrink-0" />
-            <AnimatePresence>
-              {!collapsed && (
-                <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="font-medium text-sm">
-                  Logout
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
         </div>
 
         {/* Collapse toggle */}

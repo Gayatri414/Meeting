@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Search, User, ChevronDown, LayoutDashboard, LogOut, Share2, Sparkles } from 'lucide-react';
+import { Bell, Search, User, ChevronDown, LayoutDashboard, Share2, Sparkles } from 'lucide-react';
 import { getAllMeetings } from '@/services/api';
 import { useMeetingUser } from '@/context/MeetingUserContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,7 +8,7 @@ import { useTheme } from '@/context/ThemeContext';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import AppShareModal from '@/components/share/AppShareModal';
 
-const Navbar = ({ loggedInUser }) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const { dark } = useTheme();
   const { participantNames, activeParticipant, setActiveParticipant } = useMeetingUser();
@@ -20,7 +20,7 @@ const Navbar = ({ loggedInUser }) => {
   const notifRef = useRef(null);
   const profileRef = useRef(null);
 
-  const displayName = loggedInUser?.name || loggedInUser?.email?.split('@')[0] || 'Guest';
+  const displayName = 'Guest';
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -44,12 +44,7 @@ const Navbar = ({ loggedInUser }) => {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const handleLogout = () => {
-    console.log('[AUTH] Logging out user:', loggedInUser?.email);
-    localStorage.removeItem('meetai_user');
-    localStorage.removeItem('meetai_theme');
-    navigate('/login', { replace: true });
-  };
+
 
   // Theme-aware text classes
   const textPrimary   = dark ? 'text-white'      : 'text-gray-900';
@@ -194,18 +189,11 @@ const Navbar = ({ loggedInUser }) => {
                   : 'border-transparent hover:bg-purple-50 hover:border-purple-200/60'
               }`}
             >
-              {loggedInUser?.picture ? (
-                <img src={loggedInUser.picture} alt={displayName}
-                  className="h-8 w-8 rounded-xl object-cover border border-purple-300/30"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white text-xs font-bold">
-                  {displayName.charAt(0).toUpperCase()}
-                </div>
-              )}
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white text-xs font-bold">
+                <User className="h-4 w-4" />
+              </div>
               <div className="hidden lg:flex flex-col items-start">
-                <span className={`text-xs font-semibold leading-tight ${textPrimary}`}>{displayName}</span>
+                <span className={`text-xs font-semibold leading-tight ${textPrimary}`}>MeetAI</span>
                 <span className={`text-[10px] ${textMuted}`}>Pro Account</span>
               </div>
               <ChevronDown className={`h-3.5 w-3.5 hidden lg:block ${textMuted}`} />
@@ -221,13 +209,12 @@ const Navbar = ({ loggedInUser }) => {
                   className={`absolute right-0 mt-2 w-56 rounded-2xl p-2 shadow-glass-lg z-50 border glass-card-elevated ${dropdownBorder}`}
                 >
                   <div className={`px-3 py-2.5 mb-1 border-b ${dark ? 'border-purple-700/20' : 'border-purple-100'}`}>
-                    <p className={`text-sm font-semibold ${textPrimary}`}>{displayName}</p>
-                    <p className={`text-xs truncate ${textMuted}`}>{loggedInUser?.email}</p>
+                    <p className={`text-sm font-semibold ${textPrimary}`}>MeetAI App</p>
+                    <p className={`text-xs truncate ${textMuted}`}>Meeting Intelligence</p>
                   </div>
                   {[
                     { icon: LayoutDashboard, label: 'Dashboard', action: () => navigate('/') },
                     { icon: Share2, label: 'Share App', action: () => { setShareOpen(true); setShowProfile(false); } },
-                    { icon: LogOut, label: 'Logout', action: handleLogout, danger: true }
                   ].map((item) => (
                     <motion.button
                       key={item.label}

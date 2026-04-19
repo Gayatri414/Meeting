@@ -5,7 +5,7 @@ import {
   CheckSquare, ArrowRight, Clock, Loader2, Eye, X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useOutletContext } from 'react-router-dom';
+
 import { analyzeMeeting, transcribeAudioFile, exportToNotion, analyzeScreenshot } from '@/services/api';
 import { useMeetingUser } from '@/context/MeetingUserContext';
 import useSpeechRecognition from '@/hooks/useSpeechRecognition';
@@ -20,7 +20,8 @@ import TaskSyncPanel from '@/components/dashboard/TaskSyncPanel';
 import { generateMeetingPDF } from '@/utils/pdfExport';
 
 const Dashboard = () => {
-  const { loggedInEmail, loggedInUser } = useOutletContext();
+  const loggedInEmail = '';
+  const loggedInUser = null;
   const { setFromMeetingResult } = useMeetingUser();
 
   const [transcript, setTranscript] = useState('');

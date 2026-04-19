@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { gsap, ScrollTrigger } from '@/utils/gsapConfig';
 import Navbar from './Navbar';
@@ -9,7 +9,6 @@ import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 
 const LayoutInner = () => {
   const { dark } = useTheme();
-  const [loggedInUser, setLoggedInUser] = useState(null);
   const mainRef    = useRef(null);
   const sidebarRef = useRef(null);
   const navbarRef  = useRef(null);
@@ -20,8 +19,7 @@ const LayoutInner = () => {
   const prevPath   = useRef(location.pathname);
 
   useEffect(() => {
-    const saved = localStorage.getItem('meetai_user');
-    if (saved) { try { setLoggedInUser(JSON.parse(saved)); } catch {} }
+    // No auth — no-op kept for future use
   }, []);
 
   // ── Premium page-load entrance ──────────────────────────────
@@ -108,7 +106,7 @@ const LayoutInner = () => {
     return () => window.removeEventListener('mousemove', handleMove);
   }, []);
 
-  const loggedInEmail = loggedInUser?.email || '';
+  const loggedInEmail = '';
 
   return (
     <MeetingUserProvider loggedInEmail={loggedInEmail}>
@@ -132,7 +130,7 @@ const LayoutInner = () => {
 
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           <div ref={navbarRef}>
-            <Navbar loggedInUser={loggedInUser} />
+            <Navbar />
           </div>
 
           <main
@@ -143,7 +141,7 @@ const LayoutInner = () => {
             <MobileSidebar />
             <div className="p-4 sm:p-5 lg:p-6 xl:p-8">
               <div className="max-w-7xl mx-auto">
-                <Outlet context={{ loggedInEmail, loggedInUser }} />
+                <Outlet />
               </div>
             </div>
           </main>

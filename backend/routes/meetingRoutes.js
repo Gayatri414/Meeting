@@ -1,7 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import jwt from 'jsonwebtoken';
-import { protect } from '../middleware/auth.js';
+
 import {
   analyzeMeeting,
   getAllMeetings,
@@ -21,14 +20,14 @@ const upload = multer({
 
 const router = express.Router();
 
-router.post('/transcribe-audio', protect, upload.single('audio'), transcribeAudio);
-router.post('/analyze', protect, analyzeMeeting);
-router.get('/all', protect, getAllMeetings);
-router.get('/:id/export', protect, exportPDF);
-router.get('/:id', protect, getMeetingById);
-router.delete('/:id', protect, deleteMeeting);
-router.patch('/:id/pin', protect, togglePin);
-router.patch('/:meetingId/tasks/:taskIndex', protect, updateTaskStatus);
-router.post('/:meetingId/sync', protect, syncTasks);
+router.post('/transcribe-audio', upload.single('audio'), transcribeAudio);
+router.post('/analyze', analyzeMeeting);
+router.get('/all', getAllMeetings);
+router.get('/:id/export', exportPDF);
+router.get('/:id', getMeetingById);
+router.delete('/:id', deleteMeeting);
+router.patch('/:id/pin', togglePin);
+router.patch('/:meetingId/tasks/:taskIndex', updateTaskStatus);
+router.post('/:meetingId/sync', syncTasks);
 
 export default router;
