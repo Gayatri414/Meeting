@@ -12,6 +12,8 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' }
 });
 
+console.log('[DEBUG] API Base URL:', BASE_URL);
+
 // Attach JWT token to every request
 api.interceptors.request.use((config) => {
   const stored = localStorage.getItem('meetai_user');
